@@ -6,12 +6,26 @@ from langchain_openai.chat_models import AzureChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain_core.prompts import PromptTemplate
 from rich.markdown import Markdown
+from langchain_community.document_loaders import PyPDFLoader
+
 
 con = console.Console()
 
 def markdown_response(text): 
     md = Markdown(text) 
     return md 
+
+# Read from File
+def read_from_file(filename):
+    with open(filename, 'r') as md_file:
+        txt = md_file.read() 
+        return txt
+
+
+# Parse PDF 
+load_pdf = PyPDFLoader("pdfs/ciw444.pdf")
+
+
 
 # Create ChatBot
 llm = AzureChatOpenAI(
@@ -22,12 +36,10 @@ llm = AzureChatOpenAI(
 
 
 # Create PromptTemplate 
-context = """
-LDL: 145 mg/dL 
-HDL: 55 mg/dL 
-"""
+context = read_from_file("pdfs/ciw444.md")
+
 question = """
-Make a table with data in the above context
+Get the title and Year of publication mentioned in the context
 """
 prompt_text = """
 Based on the context below, answer the question 
